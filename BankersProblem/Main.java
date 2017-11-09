@@ -6,10 +6,11 @@ This class will run the program as well as handle all I/O with the user
 */
 public class Main{
     public static void main(String args[]){
-        Scanner scan = new Scanner(System.in);
-        String input;
         int inputResources;
         int inputClients;
+        
+        Scanner scan = new Scanner(System.in);
+        String input;
         
         System.out.print("Please input the number of bank resources: ");
         input = scan.nextLine();
