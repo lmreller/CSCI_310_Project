@@ -5,4 +5,8 @@ This will also be the class that extends/implements Thread
 
 public class Client extends Thread{
     
+    
+    public void run(){
+        
+    }
 }
