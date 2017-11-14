@@ -12,7 +12,7 @@ public class Main {
 
         Bank bank;
         Client clients[];
-        
+
         Scanner scan = new Scanner(System.in);
         String input;
         Boolean isValid = false;
@@ -29,15 +29,35 @@ public class Main {
 
             if ((inputResources > 0 && inputResources <= 10) && (inputClients > 0 && inputClients <= 10)) {
                 isValid = true;
-            }
-            else{
+            } else {
                 System.out.println("Invalid input, please input values between 1 and 10");
             }
         }
-        
+
         bank = new Bank(inputResources, inputClients);
         clients = new Client[inputClients];
-        
-        
+
+        bank.getAvailable();
+        bank.getAllocation();
+        bank.getMax();
+
+        for (int i = 0; i < inputClients; i++) {
+            clients[i] = new Client(i, bank);
+            clients[i].start();
+        }
+
+        try {
+            for (int i = 0; i < inputClients; i++) {
+                clients[i].join();
+            }
+        } catch (InterruptedException e) {
+        }
+
+        System.out.println("Final Available Vector:");
+        bank.getAvailable();
+        System.out.println("Final Allocation Matrix:");
+        bank.getAllocation();
+
+        return;
     }
 }
