@@ -64,6 +64,10 @@ public class Bank {
         return false;
     }
     
+    private synchronized boolean finished(){
+        return false;
+    }
+    
     private void populateArrays(int numCustomers, int numResources) {
         Random rand = new Random();
         int max = rand.nextInt(21); // 0 to 20
