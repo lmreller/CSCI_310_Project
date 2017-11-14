@@ -7,9 +7,12 @@ This class will run the program as well as handle all I/O with the user
 public class Main {
 
     public static void main(String args[]) {
-        int inputResources;
-        int inputClients;
+        int inputResources = 0;
+        int inputClients = 0;
 
+        Bank bank;
+        Client clients[];
+        
         Scanner scan = new Scanner(System.in);
         String input;
         Boolean isValid = false;
@@ -31,5 +34,9 @@ public class Main {
                 System.out.println("Invalid input, please input values between 1 and 10");
             }
         }
+        
+        bank = new Bank(inputResources, inputClients);
+        clients = new Client[inputClients];
+        
     }
 }
