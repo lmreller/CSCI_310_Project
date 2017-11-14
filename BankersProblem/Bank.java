@@ -36,23 +36,49 @@ public class Bank {
         populateArrays(numberOfClients, numberOfResources);
     }
 
+    public void getAvailable(){
+        
+    }
     
+    public void getAllocation(){
+        
+    }
+    
+    public void getMax(){
+        
+    }
+    
+    public synchronized void getRequest(){
+        
+    }
+    
+    public synchronized boolean requestResources(){
+        return false;
+    }
+    
+    public synchronized boolean releaseResources(){
+        return false;
+    }
+    
+    public synchronized boolean safetyAlgorithm(){
+        return false;
+    }
     
     private void populateArrays(int numCustomers, int numResources) {
         Random rand = new Random();
-        int maxValue = rand.nextInt(21); // 0 to 20
+        int max = rand.nextInt(21); // 0 to 20
 
         for (int i = 0; i < numberOfResources; i++) {
             // Randomly assign number of total resources
-            available[i] = maxValue;
-            maxValue = rand.nextInt(21);
+            available[i] = max;
+            max = rand.nextInt(21);
         }
 
         for (int i = 0; i < numCustomers; i++) {
             for (int j = 0; j < numResources; j++) {
-                maxValue = rand.nextInt(available[j] + 1);
-                maximum[i][j] = maxValue;
-                need[i][j] = maxValue;
+                max = rand.nextInt(available[j] + 1);
+                maximum[i][j] = max;
+                need[i][j] = max;
             }
         }
     }

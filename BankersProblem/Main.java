@@ -38,5 +38,6 @@ public class Main {
         bank = new Bank(inputResources, inputClients);
         clients = new Client[inputClients];
         
+        
     }
 }
