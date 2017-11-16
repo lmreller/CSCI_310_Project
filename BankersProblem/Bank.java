@@ -48,19 +48,19 @@ public class Bank {
         
     }
     
-    public synchronized void getRequest(){
+    public synchronized void getRequest(int id, int[]req){
         
     }
     
-    public synchronized boolean requestResources(){
+    public synchronized boolean requestResources(int id, int[] req, int amount){
         return false;
     }
     
-    public synchronized boolean releaseResources(){
+    public synchronized boolean releaseResources(int id){
         return false;
     }
     
-    public synchronized boolean safetyAlgorithm(){
+    public synchronized boolean safetyAlgorithm(int id){
         return false;
     }
     
@@ -70,7 +70,7 @@ public class Bank {
     
     private void populateArrays(int numCustomers, int numResources) {
         Random rand = new Random();
-        int max = rand.nextInt(21); // 0 to 20
+        int max = rand.nextInt(21);
 
         for (int i = 0; i < numberOfResources; i++) {
             // Randomly assign number of total resources
