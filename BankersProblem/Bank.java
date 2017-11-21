@@ -37,37 +37,42 @@ public class Bank {
     }
 
     public void getAvailable(){
-        
+
     }
-    
+
     public void getAllocation(){
-        
+
     }
-    
+
     public void getMax(){
-        
+
     }
-    
+
     public synchronized void getRequest(int id, int[]req){
-        
+
     }
-    
+
     public synchronized boolean requestResources(int id, int[] req, int amount){
         return false;
     }
-    
+
     public synchronized boolean releaseResources(int id){
         return false;
     }
-    
+
     public synchronized boolean safetyAlgorithm(int id){
-        return false;
+      for(int j=0;j<numberOfResources;j++)
+      if(available[j]<need[id][j])
+         return false;
+
+      
+        return true;
     }
-    
+
     private synchronized boolean finished(){
         return false;
     }
-    
+
     private void populateArrays(int numCustomers, int numResources) {
         Random rand = new Random();
         int max = rand.nextInt(21);
