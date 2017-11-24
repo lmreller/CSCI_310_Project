@@ -10,7 +10,7 @@ public class Client extends Thread {
 
     int id;
     Bank bank;
-    int requestsMade;//must be at least three by the end of execution
+    int requestsMade;//must be at least three to end
 
     public Client(int i, Bank b) {
         id = i;
