@@ -37,9 +37,9 @@ public class Main {
         bank = new Bank(inputResources, inputClients);
         clients = new Client[inputClients];
 
-        bank.getAvailable();
-        bank.getAllocation();
-        bank.getMax();
+        bank.printAvailable();
+        bank.printAllocation();
+        bank.printMax();
 
         for (int i = 0; i < inputClients; i++) {
             clients[i] = new Client(i, bank);
@@ -53,10 +53,10 @@ public class Main {
         } catch (InterruptedException e) {
         }
 
-        System.out.println("Final Available Vector:");
-        bank.getAvailable();
-        System.out.println("Final Allocation Matrix:");
-        bank.getAllocation();
+        System.out.println("Ending Available Vector:");
+        bank.printAvailable();
+        System.out.println("Ending Allocation Matrix:");
+        bank.printAllocation();
 
         return;
     }

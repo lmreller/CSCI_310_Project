@@ -36,41 +36,48 @@ public class Bank {
         populateArrays(numberOfClients, numberOfResources);
     }
 
-    public void getAvailable(){
+    public void printAvailable() {
 
     }
 
-    public void getAllocation(){
+    public void printAllocation() {
 
     }
 
-    public void getMax(){
+    public void printMax() {
 
     }
 
-    public synchronized void getRequest(int id, int[]req){
+    
+    public synchronized void printRequest(int id, int[] req) {
 
     }
-
-    public synchronized boolean requestResources(int id, int[] req, int amount){
-        return false;
-    }
-
-    public synchronized boolean releaseResources(int id){
-        return false;
-    }
-
-    public synchronized boolean safetyAlgorithm(int id){
-      for(int j=0;j<numberOfResources;j++)
-      if(available[j]<need[id][j])
-         return false;
-
-      
+    
+    private synchronized boolean finished() {
+        for (int i = 0; i < numberOfClients; i++) {
+            if (!finish[i]) {
+                return false;
+            }
+        }
         return true;
     }
 
-    private synchronized boolean finished(){
+    public synchronized boolean requestResources(int id, int[] req, int amount) {
         return false;
+    }
+
+    public synchronized boolean releaseResources(int id) {
+        return false;
+    }
+
+    public synchronized boolean safetyAlgorithm(int id) {
+        for (int j = 0; j < numberOfResources; j++) {
+            if (available[j] < need[id][j]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void populateArrays(int numCustomers, int numResources) {
