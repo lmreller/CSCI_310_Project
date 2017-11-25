@@ -37,22 +37,62 @@ public class Bank {
     }
 
     public void printAvailable() {
-
+        System.out.println("Printing Available:");
+        System.out.print("[");
+        for (int i = 0; i < numberOfResources; i++) {
+            if (i != numberOfResources - 1) {
+                System.out.print(available[i] + " ");
+            } else {
+                System.out.print(available[i]);
+            }
+        }
+        System.out.println("]");
     }
 
     public void printAllocation() {
-
+        System.out.println("Printing Allocation:");
+        for (int i = 0; i < numberOfClients; i++) {
+            System.out.print("[");
+            for (int j = 0; j < numberOfResources; j++) {
+                if (j != numberOfResources - 1) {
+                    System.out.print(allocation[i][j] + " ");
+                } else {
+                    System.out.print(allocation[i][j]);
+                }
+            }
+            System.out.println("]");
+        }
     }
 
     public void printMax() {
+        System.out.println("Printing Maximum:");
 
+        for (int i = 0; i < numberOfClients; i++) {
+            System.out.print("[");
+            for (int j = 0; j < numberOfResources; j++) {
+                if (j != numberOfResources - 1) {
+                    System.out.print(maximum[i][j] + " ");
+                } else {
+                    System.out.print(maximum[i][j]);
+                }
+            }
+            System.out.println("]");
+        }
     }
 
-    
     public synchronized void printRequest(int id, int[] req) {
-
+        System.out.println("Customer " + id + " is making a request: ");
+        System.out.print("[");
+        for (int i = 0; i < numberOfResources; i++) {
+            if (i != numberOfResources - 1) {
+                System.out.print(req[i] + " ");
+            } else {
+                System.out.print(req[i]);
+            }
+        }
+        System.out.println("]");
     }
-    
+
     private synchronized boolean finished() {
         for (int i = 0; i < numberOfClients; i++) {
             if (!finish[i]) {
@@ -76,7 +116,6 @@ public class Bank {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -85,7 +124,6 @@ public class Bank {
         int max = rand.nextInt(21);
 
         for (int i = 0; i < numberOfResources; i++) {
-            // Randomly assign number of total resources
             available[i] = max;
             max = rand.nextInt(21);
         }
