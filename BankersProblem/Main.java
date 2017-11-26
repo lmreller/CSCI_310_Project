@@ -53,9 +53,11 @@ public class Main {
         } catch (InterruptedException e) {
         }
 
-        System.out.println("Final Available Vector:");
+        System.out.println("Ending Available Vector:");
         bank.printAvailable();
-        System.out.println("Final Allocation Matrix:");
+        System.out.println("Ending Allocation Matrix:");
         bank.printAllocation();
+
+        return;
     }
 }
