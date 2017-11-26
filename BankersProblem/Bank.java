@@ -131,7 +131,8 @@ public class Bank {
     public synchronized boolean releaseResources(int id) {
 
       System.out.print("\n Customer # " + id + " releasing ");
-		for (int i = 0; i < numberOfResources; i++) System.out.print(release[i] + " ");
+		for (int i = 0; i < numberOfResources; i++) 
+                    System.out.print(work[i] + " ");
 
 		for (int i = 0; i < numberOfResources; i++) {
 			available[i] += work[i];
@@ -152,7 +153,7 @@ public class Bank {
         return true;
     }
 
-    public synchronized boolean safetyAlgorithm(int id, int seqIndex) {
+    public synchronized boolean safetyAlgorithm(int id) {
         for (int j = 0; j < numberOfResources; j++) {
             if (available[j] < need[id][j]) {
                 return false;
