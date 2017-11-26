@@ -109,12 +109,13 @@ public class Bank {
 		}
 
 		// if it is safe, allocate the resources to thread threadNum
-		for (int i = 0; i < m; i++) {
+		for (int i = 0; i < numberOfResources; i++) {
 			available[i] -= req[i];
 			allocation[id][i] += req[i];
 			need[id][i] = maximum[id][i] - allocation[id][i];
 		}
 
+    /*
 		 System.out.println("Customer # " + id + " using resources.");
 		 System.out.print("Available = ");
 		 for (int i = 0; i < m; i++)
@@ -123,21 +124,22 @@ public class Bank {
 		 for (int i = 0; i < m; i++)
 		 System.out.print(allocation[id][i] + "  ");
 		 System.out.print("]");
-
+     */
 		return true;
     }
 
     public synchronized boolean releaseResources(int id) {
 
       System.out.print("\n Customer # " + id + " releasing ");
-		for (int i = 0; i < m; i++) System.out.print(release[i] + " ");
+		for (int i = 0; i < numberOfResources; i++) System.out.print(release[i] + " ");
 
-		for (int i = 0; i < m; i++) {
+		for (int i = 0; i < numberOfResources; i++) {
 			available[i] += work[i];
 			allocation[id][i] -= work[i];
 			need[id][i] = maximum[id][i] + allocation[id][i];
 		}
 
+    /*
 		System.out.print("Available = ");
 		for (int i = 0; i < m; i++)
           	System.out.print(available[i] + "  ");
@@ -146,7 +148,7 @@ public class Bank {
 		for (int i = 0; i < m; i++)
 			System.out.print(allocation[id][i] + "  ");
 		System.out.print("]");
-
+    */
         return true;
     }
 
