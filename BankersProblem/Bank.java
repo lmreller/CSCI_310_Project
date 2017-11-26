@@ -107,8 +107,11 @@ public class Bank {
 
         if (isGranted[id]) {
             for (int i = 0; i < numberOfResources; i++) {
+
                 available[i] -= req[i];
+
                 allocation[id][i] += req[i];
+                
                 need[id][i] -= req[i];
             }
         } else {
@@ -178,21 +181,21 @@ public class Bank {
     public synchronized boolean safetyAlgorithm(int id) {
         try {
             for (int j = 0; j < numberOfResources; j++) {
-                if (available[j] < need[id][j]) {
+                if (available[j] <= need[id][j]) {
                     return false;
                 }
             }
             sequence[seqIndex] = id;
             ++seqIndex;
 
-            
+
         }catch(Exception e){
             System.out.println("No Safe Sequence");
         }
         return true;
     }
 
-    
+
 
     private void createArrays(int numClients, int numResources) {
         Random rand = new Random();
