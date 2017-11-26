@@ -110,9 +110,9 @@ public class Bank {
 
                 available[i] -= req[i];
 
-                allocation[id][i] += req[i];
-                
                 need[id][i] -= req[i];
+
+                allocation[id][i] += req[i];
             }
         } else {
             System.out.println("Not enough resources");
