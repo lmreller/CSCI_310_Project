@@ -18,6 +18,7 @@ public class Bank {
     boolean isGranted[];// array of booleans that represent if a clients request is granted
     boolean finish[];   // array of booleans that represent if each request allow the program to finish, i.e. no deadlock
     int[] sequence;     // the safe sequence found from the safety algorithm
+    int seqIndex = 0;     // helper for sequence
 
     public Bank(int resources, int clients) {
         numberOfClients = clients;
@@ -103,19 +104,61 @@ public class Bank {
     }
 
     public synchronized boolean requestResources(int id, int[] req, int amount) {
-        return false;
+      if (!safetyAlgorithm(id)) {
+			return false;
+		}
+
+		// if it is safe, allocate the resources to thread threadNum
+		for (int i = 0; i < m; i++) {
+			available[i] -= req[i];
+			allocation[id][i] += req[i];
+			need[id][i] = maximum[id][i] - allocation[id][i];
+		}
+
+		 System.out.println("Customer # " + id + " using resources.");
+		 System.out.print("Available = ");
+		 for (int i = 0; i < m; i++)
+		 System.out.print(available[i] + "  ");
+		 System.out.print("Allocated = [");
+		 for (int i = 0; i < m; i++)
+		 System.out.print(allocation[id][i] + "  ");
+		 System.out.print("]");
+
+		return true;
     }
 
     public synchronized boolean releaseResources(int id) {
-        return false;
+
+      System.out.print("\n Customer # " + id + " releasing ");
+		for (int i = 0; i < m; i++) System.out.print(release[i] + " ");
+
+		for (int i = 0; i < m; i++) {
+			available[i] += work[i];
+			allocation[id][i] -= work[i];
+			need[id][i] = maximum[id][i] + allocation[id][i];
+		}
+
+		System.out.print("Available = ");
+		for (int i = 0; i < m; i++)
+          	System.out.print(available[i] + "  ");
+
+		System.out.print("Allocated = [");
+		for (int i = 0; i < m; i++)
+			System.out.print(allocation[id][i] + "  ");
+		System.out.print("]");
+
+        return true;
     }
 
-    public synchronized boolean safetyAlgorithm(int id) {
+    public synchronized boolean safetyAlgorithm(int id, int seqIndex) {
         for (int j = 0; j < numberOfResources; j++) {
             if (available[j] < need[id][j]) {
                 return false;
             }
         }
+
+        sequence[seqIndex] = id;
+        ++seqIndex;
         return true;
     }
 
