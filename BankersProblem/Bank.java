@@ -112,7 +112,7 @@ public class Bank {
 		for (int i = 0; i < numberOfResources; i++) {
 			available[i] -= req[i];
 			allocation[id][i] += req[i];
-			need[id][i] = maximum[id][i] - allocation[id][i];
+			need[id][i] -= req[i];
 		}
 
     /*
@@ -130,13 +130,18 @@ public class Bank {
 
     public synchronized boolean releaseResources(int id) {
 
+<<<<<<< HEAD
+      for (int i = 0; i < numberOfResources; i++) {
+=======
       System.out.print("\n Customer # " + id + " releasing ");
-		for (int i = 0; i < numberOfResources; i++) System.out.print(release[i] + " ");
+		for (int i = 0; i < numberOfResources; i++) 
+                    System.out.print(work[i] + " ");
 
 		for (int i = 0; i < numberOfResources; i++) {
+>>>>>>> 2d98e9cbd512829c5f74e5feb21eaf1277397c24
 			available[i] += work[i];
 			allocation[id][i] -= work[i];
-			need[id][i] = maximum[id][i] + allocation[id][i];
+			need[id][i] += allocation[id][i];
 		}
 
     /*
@@ -152,15 +157,17 @@ public class Bank {
         return true;
     }
 
-    public synchronized boolean safetyAlgorithm(int id, int seqIndex) {
+    public synchronized boolean safetyAlgorithm(int id) {
         for (int j = 0; j < numberOfResources; j++) {
-            if (available[j] < need[id][j]) {
+            if (available[j] <= need[id][j]) {
                 return false;
             }
         }
 
+        /*
         sequence[seqIndex] = id;
-        ++seqIndex;
+        seqIndex++;
+        */
         return true;
     }
 
