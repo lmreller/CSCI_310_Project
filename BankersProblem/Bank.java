@@ -24,7 +24,6 @@ public class Bank {
         numberOfClients = clients;
         numberOfResources = resources;
 
-        // Initialize arrays
         this.allocation = new int[numberOfClients][numberOfResources];
         this.available = new int[numberOfResources];
         this.maximum = new int[numberOfClients][numberOfResources];
@@ -34,11 +33,11 @@ public class Bank {
         this.work = new int[numberOfResources];
         this.sequence = new int[numberOfClients];
 
-        populateArrays(numberOfClients, numberOfResources);
+        createArrays(numberOfClients, numberOfResources);
     }
 
     public void printAvailable() {
-        System.out.println("Printing Available:");
+        System.out.println("Printing Initial/Final Available:");
         System.out.print("[");
         for (int i = 0; i < numberOfResources; i++) {
             if (i != numberOfResources - 1) {
@@ -66,7 +65,7 @@ public class Bank {
     }
 
     public void printMax() {
-        System.out.println("Printing Maximum:");
+        System.out.println("Printing Maximum Amounts:");
 
         for (int i = 0; i < numberOfClients; i++) {
             System.out.print("[");
@@ -81,8 +80,9 @@ public class Bank {
         }
     }
 
-    public synchronized void printRequest(int id, int[] req) {
-        System.out.println("Customer " + id + " is making a request: ");
+    public synchronized boolean requestResources(int id, int[] req, int amount) {
+        isGranted[id] = true;
+        System.out.println("Client " + id + " making request: ");
         System.out.print("[");
         for (int i = 0; i < numberOfResources; i++) {
             if (i != numberOfResources - 1) {
@@ -92,80 +92,109 @@ public class Bank {
             }
         }
         System.out.println("]");
-    }
 
-    private synchronized boolean finished() {
-        for (int i = 0; i < numberOfClients; i++) {
-            if (!finish[i]) {
-                return false;
+        for (int i = 0; i < numberOfResources; i++) {
+            if (req[i] <= need[id][i]) {
+                if (req[i] > available[i]) {
+                    isGranted[id] = false;
+                    break;
+                }
+            } else {
+                System.out.println("error");
+                System.exit(1);
             }
         }
-        return true;
+
+        if (isGranted[id]) {
+            for (int i = 0; i < numberOfResources; i++) {
+                available[i] -= req[i];
+                allocation[id][i] += req[i];
+                need[id][i] -= req[i];
+            }
+        } else {
+            System.out.println("Not enough resources");
+            try {
+                wait();
+            } catch (InterruptedException e) {
+            }
+
+            return isGranted[id];
+        }
+
+        isGranted[id] = safetyAlgorithm(id);
+
+        if (!isGranted[id]) {
+
+            for (int j = 0; j < numberOfResources; j++) {
+                available[j] += req[j];
+                allocation[id][j] -= req[j];
+                need[id][j] += req[j];
+            }
+
+            System.out.println("Client " + id + " must wait");
+
+            try {
+                wait();
+            } catch (InterruptedException e) {
+            }
+
+            return isGranted[id];
+        }
+        System.out.println("Safe Seq:");
+        System.out.print("[");
+        for (int i = 0; i < sequence.length; i++) {
+            if (i != sequence.length - 1) {
+                System.out.print(sequence[i] + " ");
+            } else {
+                System.out.print(sequence[i]);
+            }
+        }
+        System.out.println("]");
+
+        printAllocation();
+        System.out.println("Client " + id + " request " + amount + " granted");
+        notifyAll();
+        return isGranted[id];
     }
 
-    public synchronized boolean requestResources(int id, int[] req, int amount) {
-      if (!safetyAlgorithm(id)) {
-			return false;
-		}
+    public synchronized void releaseResources(int id) {
+        System.out.println("Client " + id + " releasing resources:");
+        System.out.print("[");
+        for (int i = 0; i < numberOfResources; i++) {
+            if (i != numberOfResources - 1) {
+                System.out.print(allocation[id][i] + " ");
+            } else {
+                System.out.print(allocation[id][i]);
+            }
 
-		// if it is safe, allocate the resources to thread threadNum
-		for (int i = 0; i < numberOfResources; i++) {
-			available[i] -= req[i];
-			allocation[id][i] += req[i];
-			need[id][i] = maximum[id][i] - allocation[id][i];
-		}
-
-    /*
-		 System.out.println("Customer # " + id + " using resources.");
-		 System.out.print("Available = ");
-		 for (int i = 0; i < m; i++)
-		 System.out.print(available[i] + "  ");
-		 System.out.print("Allocated = [");
-		 for (int i = 0; i < m; i++)
-		 System.out.print(allocation[id][i] + "  ");
-		 System.out.print("]");
-     */
-		return true;
-    }
-
-    public synchronized boolean releaseResources(int id) {
-
-      System.out.print("\n Customer # " + id + " releasing ");
-		for (int i = 0; i < numberOfResources; i++) 
-                    System.out.print(work[i] + " ");
-
-		for (int i = 0; i < numberOfResources; i++) {
-			available[i] += work[i];
-			allocation[id][i] -= work[i];
-			need[id][i] = maximum[id][i] + allocation[id][i];
-		}
-
-    /*
-		System.out.print("Available = ");
-		for (int i = 0; i < m; i++)
-          	System.out.print(available[i] + "  ");
-
-		System.out.print("Allocated = [");
-		for (int i = 0; i < m; i++)
-			System.out.print(allocation[id][i] + "  ");
-		System.out.print("]");
-    */
-        return true;
+            available[i] += allocation[id][i];
+            allocation[id][i] = 0;
+            need[id][i] = maximum[id][i];
+        }
+        System.out.println("]");
+        notifyAll();
     }
 
     public synchronized boolean safetyAlgorithm(int id) {
-        for (int j = 0; j < numberOfResources; j++) {
-            if (available[j] < need[id][j]) {
-                return false;
+        try {
+            for (int j = 0; j < numberOfResources; j++) {
+                if (available[j] < need[id][j]) {
+                    return false;
+                }
             }
-        }
+            sequence[seqIndex] = id;
+            ++seqIndex;
 
-        sequence[seqIndex] = id;
-        ++seqIndex;
+            
+        }catch(Exception e){
+            System.out.println("No Safe Sequence");
+        }
         return true;
     }
 
-    private void populateArrays(int numCustomers, int numResources) {
+    
+
+    private void createArrays(int numClients, int numResources) {
         Random rand = new Random();
         int max = rand.nextInt(21);
 
@@ -174,7 +203,7 @@ public class Bank {
             max = rand.nextInt(21);
         }
 
-        for (int i = 0; i < numCustomers; i++) {
+        for (int i = 0; i < numClients; i++) {
             for (int j = 0; j < numResources; j++) {
                 max = rand.nextInt(available[j] + 1);
                 maximum[i][j] = max;
