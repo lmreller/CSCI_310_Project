@@ -25,21 +25,21 @@ public class Client extends Thread {
         int num;
         int request[] = new int[bank.numberOfResources];
 
-        //make each client run 3 times
+        //have each client run 3 times
         while (count < 3) {
-            //random request amount
+            //set a random request amount
             for (int i = 0; i < bank.numberOfResources; i++) {
                 request[i] = rand.nextInt(bank.need[id][i] + 1);
             }
 
-            //attempt request
+            //try to make a request
             if (!bank.requestResources(id, request, count)) {
                 Thread.yield();
             }
 
             num = 1 + rand.nextInt(5);
 
-            //1 to 5 seconds
+            //sleep 1 to 5 sec
             try {
                 Thread.sleep(num * 1000);
             } catch (InterruptedException e) {
